@@ -1,0 +1,18 @@
+{
+  "assessments": {
+    "lst_001": {
+      "images": {
+        "img_001": {
+          "imageId": "img_001",
+          "assessmentId": "lst_001",
+          "imageUrl": "",
+          "objects": ["boy", "football", "dog", "park"],
+          "actions": ["playing"],
+          "attributes": ["daytime", "outdoor"],
+          "sceneSummary": "A boy is playing football with his dog in a park during daytime.",
+          "version": 1
+        }
+      }
+    }
+  }
+}

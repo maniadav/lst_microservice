@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+.env
+.venv/
+venv/
+env/
+
+*.log
+*.wav
+*.mp3
+*.m4a
+
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# WhisperX model cache
+whisper_models/
+
+# Temp audio files
+tmp/

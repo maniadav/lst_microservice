@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.env
+.venv/
+venv/
+.git/
+.gitignore
+*.md
+whisper_models/
+tmp/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
