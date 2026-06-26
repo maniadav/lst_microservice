@@ -38,3 +38,29 @@ class AnalysisResponse(BaseModel):
     overall_score: float = Field(alias="overallScore", ge=0, le=100)
 
     model_config = {"populate_by_name": True}
+
+
+class SegmentResponse(BaseModel):
+    text: str
+    speaker: str
+    start: float
+    end: float
+
+
+class DiarizationResponse(BaseModel):
+    language: str
+    full_text: str = Field(alias="fullText")
+    speaker_transcript: str = Field(alias="speakerTranscript")
+    segments: list[SegmentResponse]
+
+    model_config = {"populate_by_name": True}
+
+
+class ScoreRequest(BaseModel):
+    speaker_transcript: str = Field(alias="speakerTranscript")
+    assessment_id: str = Field(alias="assessmentId")
+    image_id: str = Field(alias="imageId")
+    child_id: str = Field(alias="childId")
+    language: str = "auto"
+
+    model_config = {"populate_by_name": True}

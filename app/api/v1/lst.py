@@ -102,3 +102,6 @@ async def analyze_lst(
             str(e),
         )
         raise
+
+# @router.post("/diarization", response_model=any)
+# @router.post("/score", response_model=any)
