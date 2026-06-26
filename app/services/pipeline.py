@@ -84,10 +84,9 @@ class LSTAnalysisService:
                 raise TranscriptionError(f"WhisperX transcription failed: {exc}") from exc
             transcription_duration = time.monotonic() - t0
             logger.info(
-                "Transcription complete in %.1fs | language=%s segments=%d",
+                "Transcription complete in %.1fs | language=%s transcript=%s",
                 transcription_duration,
                 transcription.language,
-                len(transcription.segments),
                 transcription.speaker_transcript
             )
 
@@ -95,7 +94,7 @@ class LSTAnalysisService:
 
             # Step 3: LLM analysis (speaker ID + semantics + language metrics)
             t1 = time.monotonic()
-            llm_result = {"child_transcript": "the boy is eating a cookie","observer_transcript": "the boy is eating a cookie"} #await self._analyzer.analyze(transcription.speaker_transcript)
+            llm_result = await self._analyzer.analyze(transcription.speaker_transcript)
             llm_duration = time.monotonic() - t1
             logger.info("LLM analysis complete in %.1fs", llm_duration)
 

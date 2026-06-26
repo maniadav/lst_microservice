@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from app.core.exceptions import LLMError
 
@@ -52,6 +52,19 @@ class ParsedLSTResponse(BaseModel):
     )
 
     model_config = {"populate_by_name": True}
+
+    @field_validator(
+        "child_speaker",
+        "observer_speaker",
+        "child_transcript",
+        "observer_transcript",
+        mode="before",
+    )
+    @classmethod
+    def coerce_none_to_string(cls, v: Any) -> str:
+        if v is None:
+            return ""
+        return str(v)
 
 
 def parse_lst_response(raw: dict[str, Any]) -> ParsedLSTResponse:

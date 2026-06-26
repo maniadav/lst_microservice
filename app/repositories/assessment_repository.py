@@ -106,7 +106,6 @@ class AssessmentRepository:
         cursor = self._collection("assessment_results").find(query).sort("createdAt", -1)
         return await cursor.to_list(length=100)
 
-
 def _load_local_semantics(
     assessment_id: str,
     image_id: str,
@@ -123,19 +122,24 @@ def _load_local_semantics(
         logger.error("Failed to read local semantics file: %s", exc)
         return None
 
-    assessment = data.get("assessments", {}).get(assessment_id)
-    if not assessment:
-        logger.warning("Assessment %s not found in local semantics", assessment_id)
+    assessments = data.get("assessments", {})
+
+    assessment = assessments.get(assessment_id)
+    if assessment:
+        image = assessment.get("images", {}).get(image_id)
+        if image:
+            return AssessmentImageDocument.model_validate(image)
+
+    logger.warning(
+        "Assessment=%s image=%s not found. Falling back to first assessment/image.",
+        assessment_id,
+        image_id,
+    )
+
+    try:
+        first_assessment = next(iter(assessments.values()))
+        first_image = next(iter(first_assessment["images"].values()))
+        return AssessmentImageDocument.model_validate(first_image)
+    except (StopIteration, KeyError):
+        logger.error("No assessments/images found in local semantics.")
         return None
-
-    image = assessment.get("images", {}).get(image_id)
-    if not image:
-        logger.warning(
-            "Image %s not found for assessment %s in local semantics",
-            image_id,
-            assessment_id,
-        )
-        return None
-
-    return AssessmentImageDocument.model_validate(image)
-
