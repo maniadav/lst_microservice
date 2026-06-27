@@ -10,7 +10,6 @@ class SemanticMetrics(BaseModel):
     object_coverage: float = Field(alias="objectCoverage", ge=0, le=100)
     action_coverage: float = Field(alias="actionCoverage", ge=0, le=100)
     attribute_coverage: float = Field(alias="attributeCoverage", ge=0, le=100)
-
     model_config = {"populate_by_name": True}
 
 
@@ -23,7 +22,6 @@ class LanguageMetrics(BaseModel):
     sentence_quality: str = Field(alias="sentenceQuality")
     grammar_quality: str = Field(alias="grammarQuality")
     vocabulary_richness: float = Field(alias="vocabularyRichness", ge=0, le=1)
-
     model_config = {"populate_by_name": True}
 
 

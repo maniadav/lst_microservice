@@ -15,6 +15,11 @@ image = (
     modal.Image.debian_slim(python_version="3.11")
     .apt_install("ffmpeg", "git")
     .pip_install(
+        "fastapi",
+        "uvicorn",
+        "python-multipart",
+    )
+    .pip_install(
         "torch==2.1.2",
         "torchaudio==2.1.2",
         index_url="https://download.pytorch.org/whl/cu121"
@@ -149,6 +154,7 @@ class WhisperXTranscriber:
 
 # --- Expose the Modal class as a HTTP Web API Endpoint ---
 web_app = FastAPI()
+transcriber = WhisperXTranscriber()
 
 @web_app.post("/transcribe")
 async def api_transcribe(
@@ -156,6 +162,8 @@ async def api_transcribe(
     language: str = Form("auto"),
     authorization: Optional[str] = Header(None)
 ):
+    
+    
     # Simple API Key Verification (Configure via env var inside Modal if needed)
     secret_key = os.environ.get("TRANSCRIPTION_API_KEY")
     if secret_key and authorization != f"Bearer {secret_key}":
@@ -165,12 +173,13 @@ async def api_transcribe(
     suffix = os.path.splitext(file.filename or "")[1] or ".wav"
     
     # Delegate execution to the Modal class instance running on GPU
-    transcriber = WhisperXTranscriber()
+
     result = transcriber.transcribe.remote(
         audio_bytes=content,
         audio_suffix=suffix,
         language=language
     )
+    
     return JSONResponse(content=result)
 
 
